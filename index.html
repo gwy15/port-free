@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>port-free</title>
+    <script type="module" src="/src/main.ts" defer></script>
+  </head>
+  <body>
+    <main>
+      <header>
+        <nav aria-label="排查类型">
+          <button
+            id="tab-port"
+            type="button"
+            class="active"
+            aria-pressed="true"
+          >
+            端口</button
+          ><button id="tab-file" type="button" aria-pressed="false">
+            文件
+          </button>
+        </nav>
+        <button id="elevate" type="button" class="quiet" hidden>
+          以管理员身份重启
+        </button>
+        <span id="admin-label" class="muted" hidden>管理员</span>
+      </header>
+      <form id="query-form" novalidate>
+        <div id="port-controls" class="controls">
+          <label class="sr-only" for="port">端口号</label>
+          <input
+            id="port"
+            type="text"
+            inputmode="numeric"
+            maxlength="5"
+            value="7890"
+            autocomplete="off"
+            aria-describedby="validation"
+          />
+          <button class="primary" id="scan-port" type="submit">检测</button>
+          <label class="auto"
+            ><input id="auto-refresh" type="checkbox" />自动刷新（3 秒）</label
+          >
+        </div>
+        <div id="file-controls" class="controls" hidden>
+          <label class="sr-only" for="path">文件或文件夹路径</label>
+          <input
+            id="path"
+            type="text"
+            placeholder="文件或文件夹完整路径"
+            autocomplete="off"
+            spellcheck="false"
+            aria-describedby="validation"
+          />
+          <button id="pick-file" type="button">文件…</button>
+          <button id="pick-folder" type="button">文件夹…</button>
+          <button class="primary" id="scan-file" type="submit">检测</button>
+        </div>
+        <p id="validation" class="error" hidden></p>
+      </form>
+      <p id="file-note" class="muted" hidden></p>
+      <p id="notice" role="status" hidden></p>
+      <section aria-label="占用进程">
+        <div class="result-bar">
+          <span id="status" role="status">待检测</span
+          ><span id="time" class="muted"></span
+          ><button id="release-all" type="button" class="danger-text" hidden>
+            全部结束
+          </button>
+        </div>
+        <table id="results" hidden>
+          <thead>
+            <tr>
+              <th scope="col">进程</th>
+              <th scope="col" class="pid-column">PID</th>
+              <th scope="col" id="details-heading">协议 / 地址</th>
+              <th scope="col" class="action-column">操作</th>
+            </tr>
+          </thead>
+          <tbody id="rows"></tbody>
+        </table>
+      </section>
+    </main>
+    <dialog
+      id="confirm"
+      aria-labelledby="confirm-title"
+      aria-describedby="confirm-description"
+    >
+      <form method="dialog">
+        <h2 id="confirm-title">强制结束进程？</h2>
+        <p id="confirm-description">未保存的数据可能丢失。</p>
+        <ul id="confirm-processes"></ul>
+        <div class="dialog-actions">
+          <button value="cancel" autofocus>取消</button
+          ><button value="confirm" class="danger">结束进程</button>
+        </div>
+      </form>
+    </dialog>
+  </body>
+</html>
